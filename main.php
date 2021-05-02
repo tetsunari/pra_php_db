@@ -11,8 +11,19 @@ try {
 		]
 	);
 
-	$stmt = $pdo->query("SELCT 5 + 3");
-	var_dump($stmt->fetch());
+	$pdo->query("DROP TABLE IF EXISTS posts");
+	$pdo->query(
+		"CREATE TABLE posts (
+      id INT NOT NULL AUTO_INCREMENT,
+      message VARCHAR(140), 
+      likes INT,
+      PRIMARY KEY (id)
+    )"
+	);
+
+	$stmt = $pdo->query("SHOW TABLES");
+	$result = $stmt->fetch();
+	var_dump($result);
 } catch (PDOException $e) {
 	echo $e->getMessage() . PHP_EOL;
 	exit;
