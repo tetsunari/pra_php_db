@@ -8,6 +8,7 @@ try {
 		[
 			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 			PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+			PDO::ATTR_EMULATE_PREPARES   => false,
 		]
 	);
 
@@ -28,8 +29,14 @@ try {
 	);
 
 	$stmt = $pdo->query("SELECT * FROM posts");
-	$results = $stmt->fetchAll();
-	var_dump($results);
+	$posts = $stmt->fetchAll();
+	foreach ($posts as $post) {
+		printf(
+			'%s (%d)' . PHP_EOL,
+			$post['message'],
+			$post['likes']
+		);
+	}
 } catch (PDOException $e) {
 	echo $e->getMessage() . PHP_EOL;
 	exit;
