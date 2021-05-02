@@ -20,10 +20,16 @@ try {
       PRIMARY KEY (id)
     )"
 	);
+	$pdo->query(
+		"INSERT INTO posts (message, likes) VALUES
+      ('Thanks', 12), 
+      ('thanks', 4),
+      ('Arigato', 15)"
+	);
 
-	$stmt = $pdo->query("SHOW TABLES");
-	$result = $stmt->fetch();
-	var_dump($result);
+	$stmt = $pdo->query("SELECT * FROM posts");
+	$results = $stmt->fetchAll();
+	var_dump($results);
 } catch (PDOException $e) {
 	echo $e->getMessage() . PHP_EOL;
 	exit;
