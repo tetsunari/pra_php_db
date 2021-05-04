@@ -28,26 +28,22 @@ try {
       ('Arigato', 15)"
 	);
 
+	// $search = 't';
+	$search = 't%';
+
+	// $stmt = $pdo->query("SELECT * FROM posts");
+	// $stmt = $pdo->prepare(
+	//   "SELECT * FROM posts WHERE message like ':search%'"
+	// );
 	$stmt = $pdo->prepare(
-		"UPDATE
-       posts 
-    SET 
-      message = CONCAT(:label, message) 
-    WHERE 
-      likes > :n"
+		"SELECT * FROM posts WHERE message like :search"
 	);
-	$label = '[Good!] ';
-	$n = 10;
-	// $stmt->execute([':label' => $label, ':n' => $n]);
-	$stmt->execute(['label' => $label, 'n' => $n]); //コロンは省略してもいい
+	$stmt->execute(['search' => $search]);
 
-	echo $stmt->rowCount() . ' records updated' . PHP_EOL;
-
-	$stmt = $pdo->query("SELECT * FROM posts");
 	$posts = $stmt->fetchAll();
 	foreach ($posts as $post) {
 		printf(
-			'%s (%d)' . PHP_EOL,
+			' %s (%d)' . PHP_EOL,
 			$post['message'],
 			$post['likes']
 		);
