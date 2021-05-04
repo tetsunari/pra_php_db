@@ -28,18 +28,19 @@ try {
       ('Arigato', 15)"
 	);
 
-	$label = '[Good!] ';
-	$n = 10;
-
 	$stmt = $pdo->prepare(
 		"UPDATE
        posts 
     SET 
-      message = CONCAT(?, message) 
+      message = CONCAT(:label, message) 
     WHERE 
-      likes > ?"
+      likes > :n"
 	);
-	$stmt->execute([$label, $n]);
+	$label = '[Good!] ';
+	$n = 10;
+	// $stmt->execute([':label' => $label, ':n' => $n]);
+	$stmt->execute(['label' => $label, 'n' => $n]); //コロンは省略してもいい
+
 	echo $stmt->rowCount() . ' records updated' . PHP_EOL;
 
 	$stmt = $pdo->query("SELECT * FROM posts");
