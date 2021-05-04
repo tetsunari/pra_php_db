@@ -28,17 +28,19 @@ try {
       ('Arigato', 15)"
 	);
 
-	// $n = 10;
-	$n = '10 OR 1=1';
+	$label = '[Good!] ';
+	$n = 10;
 
-	// $pdo->query("DELETE FROM posts WHERE likes < 10");
-	// $pdo->query("DELETE FROM posts WHERE likes < $n");
-	$stmt = $pdo->prepare("DELETE FROM posts WHERE likes < ?");
-	$stmt->execute([$n]);
-
-	// DELETE FROM posts WHERE likes < 10 OR 1=1
-	// DELETE FROM posts WHERE likes < '10 OR 1=1'
-	// DELETE FROM posts WHERE likes < 1　executeを使うことで最初の値だけ使用
+	$stmt = $pdo->prepare(
+		"UPDATE
+       posts 
+    SET 
+      message = CONCAT(?, message) 
+    WHERE 
+      likes > ?"
+	);
+	$stmt->execute([$label, $n]);
+	echo $stmt->rowCount() . ' records updated' . PHP_EOL;
 
 	$stmt = $pdo->query("SELECT * FROM posts");
 	$posts = $stmt->fetchAll();
