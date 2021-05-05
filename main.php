@@ -36,8 +36,16 @@ try {
     VALUES 
       (:message, :likes)"
 	);
-	$stmt->bindValue('message', $message, PDO::PARAM_STR);
-	$stmt->bindValue('likes', $likes, PDO::PARAM_INT);
+	$stmt->bindParam('message', $message, PDO::PARAM_STR);
+	$stmt->bindParam('likes', $likes, PDO::PARAM_INT);
+	$stmt->execute();
+
+	$message = 'Gracias';
+	$likes = 5;
+	$stmt->execute();
+
+	$message = 'Danke';
+	$likes = 11;
 	$stmt->execute();
 
 	$stmt = $pdo->query("SELECT * FROM posts");
