@@ -28,18 +28,19 @@ try {
       ('Arigato', 15)"
 	);
 
-	// $search = 't';
-	$search = 't%';
-
-	// $stmt = $pdo->query("SELECT * FROM posts");
-	// $stmt = $pdo->prepare(
-	//   "SELECT * FROM posts WHERE message like ':search%'"
-	// );
+	$message = 'Merci';
+	$likes = 8;
 	$stmt = $pdo->prepare(
-		"SELECT * FROM posts WHERE message like :search"
+		"INSERT INTO 
+      posts (message, likes) 
+    VALUES 
+      (:message, :likes)"
 	);
-	$stmt->execute(['search' => $search]);
+	$stmt->bindValue('message', $message, PDO::PARAM_STR);
+	$stmt->bindValue('likes', $likes, PDO::PARAM_INT);
+	$stmt->execute();
 
+	$stmt = $pdo->query("SELECT * FROM posts");
 	$posts = $stmt->fetchAll();
 	foreach ($posts as $post) {
 		printf(
