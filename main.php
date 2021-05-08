@@ -39,20 +39,24 @@ try {
 	$stmt->bindParam('message', $message, PDO::PARAM_STR);
 	$stmt->bindParam('likes', $likes, PDO::PARAM_INT);
 	$stmt->execute();
+	echo 'ID: ' . $pdo->lastInsertId() . ' inserted' . PHP_EOL;
 
 	$message = 'Gracias';
 	$likes = 5;
 	$stmt->execute();
+	echo 'ID: ' . $pdo->lastInsertId() . ' inserted' . PHP_EOL;
 
 	$message = 'Danke';
 	$likes = 11;
 	$stmt->execute();
+	echo 'ID: ' . $pdo->lastInsertId() . ' inserted' . PHP_EOL;
 
 	$stmt = $pdo->query("SELECT * FROM posts");
 	$posts = $stmt->fetchAll();
 	foreach ($posts as $post) {
 		printf(
-			' %s (%d)' . PHP_EOL,
+			'[%d] %s (%d)' . PHP_EOL,
+			$post['id'],
 			$post['message'],
 			$post['likes']
 		);
