@@ -1,5 +1,20 @@
 <?php
 
+class Post
+{
+	// public $id;
+	// public $message;
+	// public $likes;
+	//抽出したデータをそれぞれのプロパティにセットして結果を返してくれる
+	//全て public の場合、自動的にカラム名のプロパティが作られるので、実はこちらは書かなくても OK
+	//もし private にしたい場合などは書く
+
+	public function show()
+	{
+		echo "$this->message ($this->likes)" . PHP_EOL;
+	}
+}
+
 try {
 	$pdo = new PDO(
 		'mysql:host=db;dbname=myapp;charset=utf8mb4',
@@ -28,38 +43,10 @@ try {
       ('Arigato', 15)"
 	);
 
-	$message = 'Merci';
-	$likes = 8;
-	$stmt = $pdo->prepare(
-		"INSERT INTO 
-      posts (message, likes) 
-    VALUES 
-      (:message, :likes)"
-	);
-	$stmt->bindParam('message', $message, PDO::PARAM_STR);
-	$stmt->bindParam('likes', $likes, PDO::PARAM_INT);
-	$stmt->execute();
-	echo 'ID: ' . $pdo->lastInsertId() . ' inserted' . PHP_EOL;
-
-	$message = 'Gracias';
-	$likes = 5;
-	$stmt->execute();
-	echo 'ID: ' . $pdo->lastInsertId() . ' inserted' . PHP_EOL;
-
-	$message = 'Danke';
-	$likes = 11;
-	$stmt->execute();
-	echo 'ID: ' . $pdo->lastInsertId() . ' inserted' . PHP_EOL;
-
 	$stmt = $pdo->query("SELECT * FROM posts");
-	$posts = $stmt->fetchAll();
+	$posts = $stmt->fetchAll(PDO::FETCH_CLASS, 'Post'); //fetchAll() するときにこちらで PDO::FETCH_CLASS としてあげて、どのクラスでデータを引っ張ってきたいかクラス名をそのあとに渡してあげます
 	foreach ($posts as $post) {
-		printf(
-			'[%d] %s (%d)' . PHP_EOL,
-			$post['id'],
-			$post['message'],
-			$post['likes']
-		);
+		$post->show();
 	}
 } catch (PDOException $e) {
 	echo $e->getMessage() . PHP_EOL;
