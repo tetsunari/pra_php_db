@@ -2,13 +2,6 @@
 
 class Post
 {
-	// public $id;
-	// public $message;
-	// public $likes;
-	//抽出したデータをそれぞれのプロパティにセットして結果を返してくれる
-	//全て public の場合、自動的にカラム名のプロパティが作られるので、実はこちらは書かなくても OK
-	//もし private にしたい場合などは書く
-
 	public function show()
 	{
 		echo "$this->message ($this->likes)" . PHP_EOL;
@@ -43,8 +36,17 @@ try {
       ('Arigato', 15)"
 	);
 
+	$pdo->beginTransaction();
+	$stmt = $pdo->query(
+		"UPDATE posts SET likes = likes + 1 WHERE id = 1"
+	);
+	$stmt = $pdo->query(
+		"UPDATE posts SET likes = likes - 1 WHERE id = 2"
+	);
+	$pdo->commit();
+
 	$stmt = $pdo->query("SELECT * FROM posts");
-	$posts = $stmt->fetchAll(PDO::FETCH_CLASS, 'Post'); //fetchAll() するときにこちらで PDO::FETCH_CLASS としてあげて、どのクラスでデータを引っ張ってきたいかクラス名をそのあとに渡してあげます
+	$posts = $stmt->fetchAll(PDO::FETCH_CLASS, 'Post');
 	foreach ($posts as $post) {
 		$post->show();
 	}
