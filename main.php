@@ -41,7 +41,8 @@ try {
 		"UPDATE posts SET likes = likes + 1 WHERE id = 1"
 	);
 	$stmt = $pdo->query(
-		"UPDATE posts SET likes = likes - 1 WHERE id = 2"
+	// "UPDATE posts SET likes = likes - 1 WHERE id = 2"
+		"UPDATE post SET likes = likes - 1 WHERE id = 2"
 	);
 	$pdo->commit();
 
@@ -51,6 +52,14 @@ try {
 		$post->show();
 	}
 } catch (PDOException $e) {
+	$pdo->rollback();
 	echo $e->getMessage() . PHP_EOL;
-	exit;
+	// exit;
+} finally {
+	// 例外が起きても起きなくても実行したい処理は finally に続けて書いてあげれば OK 
+	$stmt = $pdo->query("SELECT * FROM posts");
+	$posts = $stmt->fetchAll(PDO::FETCH_CLASS, 'Post');
+	foreach ($posts as $post) {
+		$post->show();
+	}
 }
